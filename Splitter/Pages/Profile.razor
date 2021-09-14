@@ -1,0 +1,10 @@
+﻿@page "/profile/{ProfileCallSign?}"
+
+<h3>@ProfileCallSign</h3>
+
+@code {
+    [Parameter]
+    public string ProfileCallSign { get; set; }
+
+
+}
