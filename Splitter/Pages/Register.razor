@@ -1,9 +1,11 @@
 ﻿@page "/register"
 @using System.ComponentModel.DataAnnotations
+@using Splitter.Model.DataLayer
+@inject DataManager dataManager
 
 <div class="card m-3 w-50">
     <h4 class="card-header">Register</h4>
-    <EditForm class="card-body"  EditContext="@editContext" OnValidSubmit="HandleValidSubmit" @onreset="HandleReset">
+    <EditForm class="card-body" EditContext="@editContext" OnValidSubmit="HandleValidSubmit" @onreset="HandleReset">
         <DataAnnotationsValidator />
 
         <!--Profile core data-->
@@ -68,7 +70,7 @@
 </div>
 
 @code {
-    private FormModel model = new ();
+    private FormModel model = new();
     private EditContext editContext;
 
     protected override void OnInitialized()
@@ -78,7 +80,17 @@
 
     private void HandleValidSubmit()
     {
-        Console.WriteLine("XD");
+        var profile = new Model.Profile
+        {
+            Login = model.Login,
+            Email = model.Email,
+            Password = model.Password,
+            VisibleName = model.VisibleName,
+            CallSign = model.CallSign,
+            Description = model.Description
+        };
+
+        this.dataManager.AddProfile(profile);
     }
 
     private void HandleReset()

@@ -7,5 +7,10 @@ namespace Splitter.Model
 {
     public class Like
     {
+        public long Id { get; set; }
+
+        public long ProfileId { get; set; }
+
+        public long SplitId { get; set; }
     }
 }

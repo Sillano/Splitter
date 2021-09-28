@@ -1,5 +1,7 @@
 ﻿@page "/login"
 @using System.ComponentModel.DataAnnotations
+@using Splitter.Model.DataLayer
+@inject DataManager dataManager
 
 <div class="card m-3 w-50">
     <h4 class="card-header">Login</h4>
@@ -37,7 +39,7 @@
         var authentication = model;
 
         Console.WriteLine($"{authentication.Email} : {authentication.Password}");
-        
+
         model = new FormModel();
         editContext = new EditContext(model);
     }
