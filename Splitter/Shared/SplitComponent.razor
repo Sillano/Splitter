@@ -1,15 +1,71 @@
 ﻿@using Splitter.Model
+@using Splitter.Model.DataLayer
+@inject DataManager dataManager
 
-<div class="card" style="width: 18rem;">
+<div class="card w-50 m-3">
     <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+        <h5 class="card-title">@profile.VisibleName <a href="www.wp.pl">@@@profile.CallSign</a></h5>
+        <h6 class="card-subtitle mb-2 text-muted">@Model.Timestamp</h6>
         <p class="card-text">@Model.Content</p>
+
+        <div class="btn-group w-100">
+            <button type="button" class="btn btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"></path>
+                </svg><span class="badge badge-pill badge-primary">100</span>
+            </button>
+            <button type="button" class="btn btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-right-quote" viewBox="0 0 16 16">
+                    <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z"></path>
+                    <path d="M7.066 4.76A1.665 1.665 0 0 0 4 5.668a1.667 1.667 0 0 0 2.561 1.406c-.131.389-.375.804-.777 1.22a.417.417 0 1 0 .6.58c1.486-1.54 1.293-3.214.682-4.112zm4 0A1.665 1.665 0 0 0 8 5.668a1.667 1.667 0 0 0 2.561 1.406c-.131.389-.375.804-.777 1.22a.417.417 0 1 0 .6.58c1.486-1.54 1.293-3.214.682-4.112z"></path>
+                </svg>
+            </button>
+            <button type="button" class="btn btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                    <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                </svg>
+            </button>
+        </div>
     </div>
 </div>
+
+<!--
+<div style="margin: 20px;">
+    <div>
+        @split.Content
+    </div>
+    <div style="margin: 10px;">
+        <a>Comments:</a>
+        @foreach (var comment in Comments)
+        {
+            @if (split.Id == comment.ReferenceId)
+            {
+                <div>
+                    <a>Date: @comment.</a>
+                    <a>Author: @comment.AuthorId</a><br/>
+                    <a>@comment.Content</a>
+                </div>
+            }
+        }
+    </div>
+    <div>
+        <label>Add comment</label>
+        <input type="text" id="new_comment" class="form-control" aria-describedby="inputGroup-sizing-default">
+    </div>
+    <div>
+        <button>Send</button>
+    </div>
+</div>
+-->
 
 @code {
     [Parameter]
     public Split Model { get; set; }
 
+    private Model.Profile profile;
+
+    protected override void OnInitialized()
+    {
+        this.profile = this.dataManager.GetProfile(Model.AuthorId);
+    }
 }

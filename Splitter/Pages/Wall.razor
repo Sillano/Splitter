@@ -1,77 +1,65 @@
 ﻿@page "/wall"
 @using System.ComponentModel.DataAnnotations
 @using Splitter.Model
+@using Splitter.Model.DataLayer
+@inject DataManager dataManager
 
 <h3>Wall</h3>
 
-<div class="container">
+<div class="col">
     <div>
-        <p><b>User of post: @user.CallSign</b></p>
-        <p>Joined: @user.Created.ToString("MMMM") @user.Created.Year</p>
+        <p><b>User of post: @profile.CallSign</b></p>
+        <p>Joined: @profile.Created.ToString("MMMM") @profile.Created.Year</p>
     </div>
-    <label>Add post</label>
-    <div class="input-group mb-3">
-        <input type="text" id="new_post" class="form-control" aria-describedby="inputGroup-sizing-default">
-    </div>
-    <div>
-        <button>Send</button>
-        <button>Clear</button>
-    </div>
-    <div>
-        @foreach (var split in Splits)
-        {
-            <div style="margin: 20px;">
-                <div>
-                    @split.Content
+    
+    
+
+    <div class="container">
+        <div class="card m-3 w-50">
+            <div class="card-body">
+
+                <div class="form-group col">
+                    <label for="exampleFormControlTextarea1">Nowy split? Wprowadź zamęt:</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                 </div>
-                <div style="margin: 10px;">
-                    <a>Comments:</a>
-                    @foreach (var comment in Comments)
-                    {
-                        @if (split.Id == comment.ReferenceId)
-                        {
-                            <div>
-                                <a>Date: @comment.</a>
-                                <a>Author: @comment.AuthorId</a><br />
-                                <a>@comment.Content</a>
-                            </div>
-                        }
-                    }
-                </div>
-                <div>
-                    <label>Add comment</label>
-                    <input type="text" id="new_comment" class="form-control" aria-describedby="inputGroup-sizing-default">
-                </div>
-                <div>
-                    <button>Send</button>
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary mr-1">Send</button>
                 </div>
             </div>
-        }
+        </div>
+
+        <div id="splitsContainer">
+            @foreach (var split in Splits)
+            {
+                <SplitComponent Model="split" />
+            }
+        </div>
     </div>
 </div>
 
-@code{ private Model.Profile user = new Model.Profile()
+@code{
+
+    private Model.Profile profile;
+
+    protected override void OnInitialized()
     {
-        Id = 1,
-        Login = "User",
-        Password = "useruser123",
-        VisibleName = "user",
-        CallSign = "New user",
-        Created = DateTime.Now,
-        Email = "user@user.com",
-        Description = "Account of user",
-        Status = ProfileStatus.Ok
-    };
-    public List<Split> Splits { get; set; } = new List<Split>()
+        this.profile = this.dataManager.GetProfile(1);
+    }
+
+    public List<Split> Splits { get; set; } = new()
     {
-        new Split { Id = 1, Content = "Some text of content", AuthorId = 1, Type = SplitType.Normal, ReferenceId = null, HasBeenEdited = false},
-        new Split { Id = 2, Content = "Some second text of content", AuthorId = 1, Type = SplitType.Normal, ReferenceId = null, HasBeenEdited = false},
+        new Split { Id = 1, Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam consequat quis erat efficitur accumsan. Duis quam libero.", AuthorId = 1, Type = SplitType.Normal, ReferenceId = null, HasBeenEdited = false},
+        new Split { Id = 2, Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vehicula finibus velit sed commodo. Quisque augue.", AuthorId = 1, Type = SplitType.Normal, ReferenceId = null, HasBeenEdited = false},
     };
-    public List<Split> Comments { get; set; } = new List<Split>()
+
+    public List<Split> Comments { get; set; } = new()
     {
         new Split { Id = 3, Content = "Comment 1", AuthorId = 1, Type = SplitType.Comment, ReferenceId = 1, HasBeenEdited = false},
         new Split { Id = 4, Content = "Comment 2", AuthorId = 1, Type = SplitType.Comment, ReferenceId = 1, HasBeenEdited = false},
         new Split { Id = 5, Content = "Comment 3", AuthorId = 1, Type = SplitType.Comment, ReferenceId = 2, HasBeenEdited = false},
         new Split { Id = 6, Content = "Comment 4", AuthorId = 1, Type = SplitType.Comment, ReferenceId = 2, HasBeenEdited = false},
     };
-    }
+
+
+}
