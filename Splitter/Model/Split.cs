@@ -23,7 +23,7 @@ namespace Splitter.Model
 
         public bool HasBeenEdited { get; set; }
 
-        public DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.Now;
 
         public bool IsValid()
         {
