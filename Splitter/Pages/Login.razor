@@ -1,7 +1,64 @@
 ﻿@page "/login"
+@using System.ComponentModel.DataAnnotations
 
-<h3>Login</h3>
+<div class="card m-3 w-50">
+    <h4 class="card-header">Login</h4>
+    <EditForm class="card-body" EditContext="@editContext" OnValidSubmit="HandleValidSubmit" @onreset="HandleReset">
+        <DataAnnotationsValidator />
+
+        <div class="form-group col">
+            <label>Email address</label>
+            <InputText class="form-control" id="email" @bind-Value="model.Email" />
+        </div>
+
+        <div class="form-group col">
+            <label>Password</label>
+            <InputText class="form-control" id="password" type="password" @bind-Value="model.Password" />
+        </div>
+
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary mr-1">Login</button>
+            <button type="reset" class="btn btn-secondary">Cancel</button>
+        </div>
+    </EditForm>
+</div>
 
 @code {
+    private FormModel model = new();
+    private EditContext editContext;
 
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(model);
+    }
+
+    private void HandleValidSubmit()
+    {
+        var authentication = model;
+
+        Console.WriteLine($"{authentication.Email} : {authentication.Password}");
+        
+        model = new FormModel();
+        editContext = new EditContext(model);
+    }
+
+    private void HandleReset()
+    {
+        model = new FormModel();
+        editContext = new EditContext(model);
+
+        //TODO: some fallback
+    }
+
+    private class FormModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email Address")]
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+    }
 }

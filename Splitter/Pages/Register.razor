@@ -1,7 +1,129 @@
 ﻿@page "/register"
+@using System.ComponentModel.DataAnnotations
 
-<h3>Register</h3>
+<div class="card m-3 w-50">
+    <h4 class="card-header">Register</h4>
+    <EditForm class="card-body"  EditContext="@editContext" OnValidSubmit="HandleValidSubmit" @onreset="HandleReset">
+        <DataAnnotationsValidator />
+
+        <!--Profile core data-->
+
+        <div class="form-group col">
+            <label>Login</label>
+            <InputText class="form-control" id="login" @bind-Value="model.Login" />
+            <ValidationMessage For="@(() => model.Login)" />
+        </div>
+
+        <div class="form-group col">
+            <label>Email address</label>
+            <InputText class="form-control" id="email" @bind-Value="model.Email" />
+            <ValidationMessage For="@(() => model.Email)" />
+        </div>
+
+        <!--Profile security-->
+
+        <div class="form-group col">
+            <label>Password</label>
+            <InputText class="form-control" id="password" type="password" @bind-Value="model.Password" />
+            <ValidationMessage For="@(() => model.Password)" />
+        </div>
+
+        <div class="form-group col">
+            <label>Confirm password</label>
+            <InputText class="form-control" id="repeatedPassword" type="password" @bind-Value="model.ConfirmPassword" />
+            <ValidationMessage For="@(() => model.ConfirmPassword)" />
+        </div>
+
+        <!--Profile identification-->
+
+        <div class="form-group col">
+            <label>Visible profile name</label>
+            <InputText class="form-control" id="profileName" @bind-Value="model.VisibleName" />
+            <ValidationMessage For="@(() => model.VisibleName)" />
+        </div>
+
+        <div class="form-group col">
+            <label>Call Sign</label>
+            <InputText class="form-control" id="callsign" @bind-Value="model.CallSign" />
+            <ValidationMessage For="@(() => model.CallSign)" />
+        </div>
+
+        <div class="form-group col">
+            <label>Description</label>
+            <InputText class="form-control" id="profileDescription" @bind-Value="model.Description" />
+            <ValidationMessage For="@(() => model.Description)" />
+        </div>
+
+        <div class="form-group form-check">
+            <InputCheckbox @bind-Value="model.AcceptTerms" id="acceptTerms" class="form-check-input" />
+            <label for="acceptTerms" class="form-check-label">Accept Terms & Conditions</label>
+            <ValidationMessage For="@(() => model.AcceptTerms)" />
+        </div>
+
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary mr-1">Register</button>
+            <button type="reset" class="btn btn-secondary">Cancel</button>
+        </div>
+    </EditForm>
+</div>
 
 @code {
+    private FormModel model = new ();
+    private EditContext editContext;
 
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(model);
+    }
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("XD");
+    }
+
+    private void HandleReset()
+    {
+        model = new FormModel();
+        editContext = new EditContext(model);
+    }
+
+    private class FormModel
+    {
+        [Required]
+        [Display(Name = "Login")]
+        public string Login { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email Address")]
+        public string Email { get; set; }
+
+
+        [Required]
+        [Display(Name = "Password")]
+        [MinLength(8, ErrorMessage = "Password must be at least 6 characters")]
+        public string Password { get; set; }
+
+        [Required]
+        [Compare(nameof(Password))]
+        [Display(Name = "Confirm Password")]
+        public string ConfirmPassword { get; set; }
+
+
+        [Required]
+        [Display(Name = "Visible Name")]
+        public string VisibleName { get; set; }
+
+        [Required]
+        [Display(Name = "CallSign")]
+        public string CallSign { get; set; }
+
+        [Required]
+        [Display(Name = "Login")]
+        public string Description { get; set; }
+
+        [Required]
+        [Range(typeof(bool), "true", "true", ErrorMessage = "Accept Ts & Cs is required")]
+        public bool AcceptTerms { get; set; }
+    }
 }
